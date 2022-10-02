@@ -53,15 +53,15 @@ HTMLElement.prototype.setAttributes = function (obj) {
 
 interface Subtree {
     p: HTMLElement;
-    c: Array<Subtree | undefined>;
+    c?: Array<Subtree>;
 }
 
-HTMLElement.prototype.renderSubtree = function (tree: Subtree | undefined) {
+HTMLElement.prototype.renderSubtree = function (tree: Subtree) {
     recursiveRenderSubtree({ p: this, c: [tree] });
 };
 
-function recursiveRenderSubtree(tree: Subtree | undefined) {
+function recursiveRenderSubtree(tree: Subtree) {
     if (!tree?.c) return;
-    tree.p.replaceChildren(...tree.c.map((child) => child?.p as Node));
+    tree.p.replaceChildren(...tree.c.map((child) => child.p as Node));
     tree.c.forEach((child) => recursiveRenderSubtree(child));
 }
