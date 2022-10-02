@@ -23,7 +23,8 @@ const useSubscribable = <T>(initialValue: T) => {
     let internalValue = initialValue;
     let callbacks: SubscriberFunction<T>[] = [];
     return {
-        sub(onSub: SubscriberFunction<T>) {
+        sub(onSub: SubscriberFunction<T>, runOnSubscription?: boolean) {
+            if (runOnSubscription) onSub(internalValue);
             callbacks.push(onSub);
             return {
                 unsub: () => {
