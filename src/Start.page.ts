@@ -1,4 +1,5 @@
 function Start(): Subtree {
+    /** Components */
     const Container = styled("div")`
         position: fixed;
         top: 50%;
@@ -31,8 +32,31 @@ function Start(): Subtree {
         return button;
     };
 
+    /** Local instance of components */
+    const apiInput = Input();
+    const generateWordButton = Button();
+
+    /** Handlers */
+    const onSubmit = async () => {
+        const req = new XMLHttpRequest();
+        req.open("GET", apiInput.value, true);
+        req.onload = generateWord;
+        req.send();
+    };
+
+    const generateWord = function (this: XMLHttpRequest, evt: ProgressEvent) {
+        const words = this.responseText.split("\n");
+        const { word } = useGlobalStore();
+        word.pub(words[Math.floor(Math.random() * words.length)]);
+    };
+    /** Bind Handlers */
+    generateWordButton.onclick = onSubmit;
+
     return {
         p: Container,
-        c: [{ p: Input(), s: { marginBottom: "8px" } }, { p: Button() }],
+        c: [
+            { p: apiInput, s: { marginBottom: "8px" } },
+            { p: generateWordButton },
+        ],
     };
 }
