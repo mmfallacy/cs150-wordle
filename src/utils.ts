@@ -52,8 +52,9 @@ HTMLElement.prototype.setAttributes = function (obj) {
 };
 
 interface Subtree {
-    p: HTMLElement;
+    p: HTMLElementTagNameMap[keyof HTMLElementTagNameMap] | HTMLElement;
     c?: Array<Subtree>;
+    s?: Partial<CSSStyleDeclaration>;
 }
 
 HTMLElement.prototype.renderSubtree = function (tree: Subtree) {
@@ -61,7 +62,11 @@ HTMLElement.prototype.renderSubtree = function (tree: Subtree) {
 };
 
 function recursiveRenderSubtree(tree: Subtree) {
-    if (!tree?.c) return;
+    if (tree.s)
+        Object.entries(tree.s).map(
+            ([key, value]) => (tree.p.style[key as any] = value as string)
+        );
+    if (!tree.c) return;
     tree.p.replaceChildren(...tree.c.map((child) => child.p as Node));
     tree.c.forEach((child) => recursiveRenderSubtree(child));
 }
