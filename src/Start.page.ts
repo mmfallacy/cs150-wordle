@@ -38,6 +38,7 @@ function Start(): Subtree {
 
     /** Handlers */
     const onSubmit = async () => {
+        if (!apiInput.value) return alert("No URL has been specified.");
         const req = new XMLHttpRequest();
         req.open("GET", apiInput.value, true);
         req.onload = generateWord;
