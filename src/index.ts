@@ -2,6 +2,7 @@
 /// <reference path="Start.page.ts"/>
 /// <reference path="store.ts"/>
 /// <reference path="colors.ts"/>
+/// <reference path="components/index.ts"/>
 
 const root = document.getElementById("root");
 const useGlobalStore = createStore();
