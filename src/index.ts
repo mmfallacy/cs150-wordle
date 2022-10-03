@@ -18,9 +18,6 @@ const h1 = styled("h1")`
 
 word.sub((value) => (h1.textContent = value));
 
-word.sub(
-    (value) => root?.renderSubtree(value ? KeyboardLayout() : Start()),
-    true
-);
+word.sub((value) => root?.renderSubtree(value ? Game() : Start()), true);
 
 word.pub("wroth");
