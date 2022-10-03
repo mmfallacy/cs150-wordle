@@ -1,7 +1,6 @@
-function KeyboardLayout() {
+function KeyboardLayout(): Subtree {
     const layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
     const row = (len: number) => {
-        console.log(len);
         return styled("div")`
             display: grid;
             grid-template-columns: repeat(${len}, min-content);
@@ -14,6 +13,8 @@ function KeyboardLayout() {
         flex-direction: column;
         align-items: center;
     `;
+
+    KeyboardContainer.classList.add("keyboard");
 
     const Key = (content: string) => {
         const span = styled("span")`
@@ -28,12 +29,21 @@ function KeyboardLayout() {
             display: flex;
             align-items: center;
             justify-content: center;
+
+            transition: background-color 0.02s linear;
         `;
 
         span.textContent = content;
+        span.setAttribute("data-key", content);
 
         return span;
     };
+
+    css`
+        & .pressed {
+            background-color: ${COLORS.gray[400]} !important;
+        }
+    `("keyboard");
 
     return {
         p: KeyboardContainer,
