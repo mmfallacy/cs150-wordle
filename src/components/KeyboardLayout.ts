@@ -1,5 +1,9 @@
 function KeyboardLayout(): Subtree {
-    const layout = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+    const layout = [
+        "qwertyuiop".split(""),
+        "asdfghjkl".split(""),
+        ["enter", ..."zxcvbnm".split(""), "⠀⠀←⠀⠀"],
+    ];
     const row = (len: number) => {
         return styled("div")`
             display: grid;
@@ -18,13 +22,14 @@ function KeyboardLayout(): Subtree {
 
     const Key = (content: string) => {
         const span = styled("span")`
-            height: 72px;
-            width: 60px;
-            background-color: ${COLORS.gray[300]};
+            height: 54px;
+            min-width: 40px;
+            padding: 8px;
+            background-color: ${COLORS.gray[400]};
             border: 1px solid ${COLORS.gray[400]};
             border-radius: 4px;
-            font-size: 1.3rem;
-            font-weight: semibold;
+            font-size: 1rem;
+            font-weight: bold;
             text-transform: uppercase;
             display: flex;
             align-items: center;
@@ -41,7 +46,7 @@ function KeyboardLayout(): Subtree {
 
     css`
         & .pressed {
-            background-color: ${COLORS.gray[400]} !important;
+            background-color: ${COLORS.gray[500]} !important;
         }
     `("keyboard");
 
@@ -49,7 +54,7 @@ function KeyboardLayout(): Subtree {
         p: KeyboardContainer,
         c: layout.map((el) => ({
             p: row(el.length),
-            c: el.split("").map((key) => ({
+            c: el.map((key) => ({
                 p: Key(key),
             })),
             s: { marginBottom: "4px" },

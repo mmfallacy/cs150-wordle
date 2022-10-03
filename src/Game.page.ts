@@ -59,7 +59,9 @@ function Game(): Subtree {
         }
         keyboardInput.dispatchEvent(new Event("change"));
 
-        const KeyboardKey = keyboard.p.querySelector(`[data-key="${key}"]`);
+        const KeyboardKey = keyboard.p.querySelector(
+            `[data-key="${key === "backspace" ? "⠀⠀←⠀⠀" : key}"]`
+        );
 
         KeyboardKey?.classList.add("pressed");
         setTimeout(() => KeyboardKey?.classList.remove("pressed"), 200);

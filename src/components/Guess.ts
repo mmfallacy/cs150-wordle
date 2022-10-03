@@ -12,7 +12,7 @@ function Guess(): Subtree {
     `;
     const Letter = () => {
         const span = styled("span")`
-            border: 1px solid ${COLORS.gray[400]};
+            border: 1px solid ${COLORS.gray[500]};
             height: 60px;
             width: 60px;
             display: flex;
