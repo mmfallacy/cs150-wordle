@@ -76,10 +76,9 @@ function Game(): Subtree {
         const currentGuessDisplay =
             retrieveCurrentGuessByIndex(current_guess_index);
 
-        self.value.split("").map((char, i) => {
+        for (let i = 0; i < GUESS_MAX_LENGTH; i++)
             currentGuessDisplay.getElementsByTagName("span")[i].textContent =
-                char;
-        });
+                self.value[i] ?? "";
     };
 
     const processGuess = async () => {
