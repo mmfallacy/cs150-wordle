@@ -17,6 +17,25 @@ const styled =
         return element;
     };
 
+const css =
+    (strings: TemplateStringsArray, ...expressions: any[]) =>
+    (prefix: string) => {
+        const cssText = expressions.reduce(
+            (acc: string, expression: any, index: number) =>
+                acc +
+                (typeof expression === "function" ? expression() : expression) +
+                strings[index + 1],
+            strings[0]
+        );
+
+        const element = document.createElement("style");
+        element.innerHTML = cssText.replaceAll("&", `.${prefix}`);
+
+        document.head.appendChild(element);
+
+        return element;
+    };
+
 type SubscriberFunction<T> = (arg0: T) => void;
 
 const useSubscribable = <T>(initialValue: T) => {
