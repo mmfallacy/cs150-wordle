@@ -48,6 +48,15 @@ function KeyboardLayout(): Subtree {
         & .pressed {
             background-color: ${COLORS.gray[500]} !important;
         }
+        & .correct {
+            background-color: ${COLORS.green[500]} !important;
+        }
+        & .misplaced {
+            background-color: ${COLORS.orange[400]} !important;
+        }
+        & .wrong {
+            background-color: ${COLORS.gray[600]} !important;
+        }
     `("keyboard");
 
     return {
