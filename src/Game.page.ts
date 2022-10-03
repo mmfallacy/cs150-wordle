@@ -71,20 +71,57 @@ function Game(): Subtree {
         return guessContainer.childNodes[index] as HTMLElement;
     };
 
+    const retrieveLettersInGuess = (guess: HTMLElement): HTMLCollection => {
+        return guess.getElementsByTagName("span");
+    };
+
     const onInputChange = (e: Event) => {
         const self = e.target as HTMLInputElement;
         const currentGuessDisplay =
             retrieveCurrentGuessByIndex(current_guess_index);
 
         for (let i = 0; i < GUESS_MAX_LENGTH; i++)
-            currentGuessDisplay.getElementsByTagName("span")[i].textContent =
+            retrieveLettersInGuess(currentGuessDisplay)[i].textContent =
                 self.value[i] ?? "";
     };
 
     const processGuess = async () => {
+        const guess = keyboardInput.value;
+        const currentGuessDisplay =
+            retrieveCurrentGuessByIndex(current_guess_index);
+
         if (keyboardInput.value.length < 5) return;
         current_guess_index += 1;
         keyboardInput.value = "";
+
+        const { word } = useGlobalStore();
+
+        console.log(word.value, guess, word.value === guess);
+
+        guess
+            .split("")
+            .map((char, i) => {
+                if (char !== word.value[i]) return char;
+
+                retrieveLettersInGuess(currentGuessDisplay)[i].classList.add(
+                    "correct"
+                );
+            })
+            .map((char, i) => {
+                if (!char) return;
+                if (!word.value.includes(char)) return;
+
+                retrieveLettersInGuess(currentGuessDisplay)[i].classList.add(
+                    "misplaced"
+                );
+            });
+
+        if (word.value === guess) return gameWin();
+    };
+
+    const gameWin = () => {
+        const winning_index = current_guess_index - 1;
+        alert("correct");
     };
 
     word.sub(
