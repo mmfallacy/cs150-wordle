@@ -98,7 +98,6 @@ function Game(): Subtree {
         current_guess_index += 1;
         keyboardInput.value = "";
 
-        if (current_guess_index > 5) return alertAfterRepaint("game over");
         const { word } = useGlobalStore();
 
         console.log(word.value, guess, word.value === guess);
@@ -134,6 +133,13 @@ function Game(): Subtree {
             });
 
         if (word.value === guess) return gameWin();
+
+        if (current_guess_index > 5) return gameOver();
+    };
+
+    const gameOver = () => {
+        const { word } = useGlobalStore();
+        alertAfterRepaint(`gameover. answer is: ${word.value}`);
     };
 
     const gameWin = () => {
@@ -160,13 +166,28 @@ function Game(): Subtree {
     return {
         p: Container,
         c: [
+            Header(),
             {
                 p: guessContainer,
                 c: Array(MAX_NUMBER_OF_GUESSES)
                     .fill(0)
                     .map((_) => Guess()),
+                s: {
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translateX(-50%) translateY(-50%)",
+                },
             },
-            keyboard,
+            {
+                ...keyboard,
+                s: {
+                    position: "fixed",
+                    bottom: "0",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                },
+            },
             { p: keyboardInput },
         ],
     };
