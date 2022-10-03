@@ -1,10 +1,25 @@
 const GUESS_MAX_LENGTH = 5;
 
+css`
+    & .correct {
+        background-color: ${COLORS.green[500]} !important;
+        border: 1px transparent !important;
+    }
+
+    & .misplaced {
+        background-color: darkgoldenrod !important;
+        border: 1px transparent !important;
+    }
+`("guess");
+
 function Guess(): Subtree {
     /** Components */
     const Container = styled("div")`
         text-align: center;
     `;
+
+    Container.classList.add("guess");
+
     const Grid = styled("div")`
         display: inline-grid;
         grid-gap: 4px;
