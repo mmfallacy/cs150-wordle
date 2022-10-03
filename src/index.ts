@@ -11,13 +11,6 @@ const { word } = useGlobalStore();
 
 word.sub((value) => console.log("WORD:", value));
 
-const h1 = styled("h1")`
-    font-size: 10rem;
-    color: red;
-`;
-
-word.sub((value) => (h1.textContent = value));
-
 word.sub((value) => root?.renderSubtree(value ? Game() : Start()), true);
 
-word.pub("wroth");
+// word.pub("hokku");
