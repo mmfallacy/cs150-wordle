@@ -7,7 +7,7 @@ css`
     }
 
     & .misplaced {
-        background-color: darkgoldenrod !important;
+        background-color: ${COLORS.orange[400]} !important;
         border: 1px transparent !important;
     }
 `("guess");
@@ -34,6 +34,7 @@ function Guess(): Subtree {
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
+            font-weight: bold;
         `;
 
         return span;
