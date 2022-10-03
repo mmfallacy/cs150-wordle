@@ -92,3 +92,9 @@ function recursiveRenderSubtree(tree: Subtree) {
     tree.p.replaceChildren(...tree.c.map((child) => child.p as Node));
     tree.c.forEach((child) => recursiveRenderSubtree(child));
 }
+
+function alertAfterRepaint(message: string) {
+    requestAnimationFrame(() => {
+        setTimeout(() => alert(message));
+    });
+}
