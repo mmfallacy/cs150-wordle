@@ -75,6 +75,10 @@ function Game(): Subtree {
         return guess.getElementsByTagName("span");
     };
 
+    const getKeyboardKey = (key: string): HTMLElement => {
+        return keyboard.p.querySelector(`[data-key="${key}"]`)!;
+    };
+
     const onInputChange = (e: Event) => {
         const self = e.target as HTMLInputElement;
         const currentGuessDisplay =
@@ -94,26 +98,39 @@ function Game(): Subtree {
         current_guess_index += 1;
         keyboardInput.value = "";
 
+        if (current_guess_index > 5) return alertAfterRepaint("game over");
         const { word } = useGlobalStore();
 
         console.log(word.value, guess, word.value === guess);
 
+        const diff = word.value.split("");
+
         guess
             .split("")
             .map((char, i) => {
-                if (char !== word.value[i]) return char;
+                if (char !== diff[i]) return char;
+
+                diff[i] = "";
 
                 retrieveLettersInGuess(currentGuessDisplay)[i].classList.add(
                     "correct"
                 );
+
+                getKeyboardKey(char).classList.add("correct");
             })
             .map((char, i) => {
                 if (!char) return;
-                if (!word.value.includes(char)) return;
+                if (!diff.includes(char)) return char;
 
                 retrieveLettersInGuess(currentGuessDisplay)[i].classList.add(
                     "misplaced"
                 );
+
+                getKeyboardKey(char).classList.add("misplaced");
+            })
+            .map((char, i) => {
+                if (!char) return;
+                getKeyboardKey(char).classList.add("wrong");
             });
 
         if (word.value === guess) return gameWin();
@@ -121,7 +138,7 @@ function Game(): Subtree {
 
     const gameWin = () => {
         const winning_index = current_guess_index - 1;
-        alert("correct");
+        alertAfterRepaint("correct");
     };
 
     word.sub(
