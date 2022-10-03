@@ -1,3 +1,5 @@
+// TODO: use a preprocessor to generate styles instead of passing as cssText
+// This fixes the precedence over what styles to choose based on specificity
 const styled =
     <T extends keyof HTMLElementTagNameMap>(target: T) =>
     (
