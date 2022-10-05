@@ -1,9 +1,12 @@
+const KEYBOARD_LAYOUT = [
+    "qwertyuiop".split(""),
+    "asdfghjkl".split(""),
+    ["enter", ..."zxcvbnm".split(""), "⠀⠀←⠀⠀"],
+];
+
 function KeyboardLayout(): Subtree {
-    const layout = [
-        "qwertyuiop".split(""),
-        "asdfghjkl".split(""),
-        ["enter", ..."zxcvbnm".split(""), "⠀⠀←⠀⠀"],
-    ];
+    const layout = KEYBOARD_LAYOUT;
+
     const row = (len: number) => {
         return styled("div")`
             display: grid;

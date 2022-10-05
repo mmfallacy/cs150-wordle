@@ -98,3 +98,14 @@ function alertAfterRepaint(message: string) {
         setTimeout(() => alert(message));
     });
 }
+
+function waitForElement(
+    element: HTMLElement,
+    cb: () => void,
+    pollTime?: number
+) {
+    if (element.isConnected) cb();
+    setTimeout(() => {
+        waitForElement(element, cb, pollTime);
+    }, pollTime ?? 100);
+}

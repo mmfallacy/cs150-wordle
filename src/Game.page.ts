@@ -3,6 +3,29 @@ const MAX_NUMBER_OF_GUESSES = 6;
 function Game(): Subtree {
     let current_guess_index = 0;
 
+    /** Lifecycles */
+    const onMount = () => {
+        document.addEventListener("keydown", onKeydown);
+        keyboardInput.addEventListener("change", onInputChange);
+
+        waitForElement(keyboard.p, () => {
+            KEYBOARD_LAYOUT.flat().map((key) =>
+                getKeyboardKey(key).addEventListener(
+                    "click",
+                    onKeyboardKeyPress
+                )
+            );
+        });
+    };
+
+    const onDismount = () => {
+        document.removeEventListener("keydown", onKeydown);
+        keyboardInput.removeEventListener("change", onInputChange);
+        KEYBOARD_LAYOUT.flat().map((key) =>
+            getKeyboardKey(key).removeEventListener("click", onKeyboardKeyPress)
+        );
+    };
+
     /** Components */
     const HiddenInput = () => {
         const input = styled("input")`
@@ -140,11 +163,20 @@ function Game(): Subtree {
         if (current_guess_index > 5) return gameOver();
     };
 
+    const onKeyboardKeyPress = (e: MouseEvent) => {
+        const self = e.target as HTMLSpanElement;
+        const key = self.getAttribute("data-key");
+        key &&
+            document.dispatchEvent(
+                new KeyboardEvent("keydown", {
+                    key: key === "⠀⠀←⠀⠀" ? "backspace" : key,
+                })
+            );
+    };
+
     const gameOver = () => {
         const { word } = useGlobalStore();
-        document.removeEventListener("keydown", onKeydown);
-        keyboardInput.removeEventListener("change", onInputChange);
-
+        onDismount();
         current_guess_index = 0;
         alertAfterRepaint(`gameover. answer is: ${word.value}`);
         // word.pub("");
@@ -152,16 +184,12 @@ function Game(): Subtree {
 
     const gameWin = () => {
         const winning_index = current_guess_index - 1;
-        document.removeEventListener("keydown", onKeydown);
-        keyboardInput.removeEventListener("change", onInputChange);
-
+        onDismount();
         current_guess_index = 0;
         alertAfterRepaint("correct");
 
         // word.pub("");
     };
-
-    document.addEventListener("keydown", onKeydown);
 
     const guessContainer = styled("div")`
         display: grid;
@@ -169,7 +197,7 @@ function Game(): Subtree {
         grid-gap: 4px;
     `;
 
-    keyboardInput.addEventListener("change", onInputChange);
+    onMount();
 
     return {
         p: Container,
