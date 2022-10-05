@@ -84,6 +84,8 @@ function Game(): Subtree {
         const currentGuessDisplay =
             retrieveCurrentGuessByIndex(current_guess_index);
 
+        if (!currentGuessDisplay) return;
+
         for (let i = 0; i < GUESS_MAX_LENGTH; i++)
             retrieveLettersInGuess(currentGuessDisplay)[i].textContent =
                 self.value[i] ?? "";
@@ -139,21 +141,22 @@ function Game(): Subtree {
 
     const gameOver = () => {
         const { word } = useGlobalStore();
+        current_guess_index = 0;
         alertAfterRepaint(`gameover. answer is: ${word.value}`);
+        document.removeEventListener("keydown", onKeydown);
+        word.pub("");
     };
 
     const gameWin = () => {
         const winning_index = current_guess_index - 1;
+        current_guess_index = 0;
         alertAfterRepaint("correct");
+
+        document.removeEventListener("keydown", onKeydown);
+        word.pub("");
     };
 
-    word.sub(
-        (value) =>
-            value
-                ? document.addEventListener("keydown", onKeydown)
-                : document.removeEventListener("keydown", onKeydown),
-        true
-    );
+    document.addEventListener("keydown", onKeydown);
 
     const guessContainer = styled("div")`
         display: grid;
