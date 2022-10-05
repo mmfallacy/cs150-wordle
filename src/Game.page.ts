@@ -49,12 +49,13 @@ function Game(): Subtree {
                 if (keyboardInput.value.length < 5) keyboardInput.value += key;
                 // Replace the last character on succeeding
                 // keypresses if 5 characters have been filled
-                else
-                    keyboardInput.value =
-                        keyboardInput.value.substring(
-                            0,
-                            keyboardInput.value.length - 1
-                        ) + key;
+                // ADDENDUM: Spec says do nothing
+                // else
+                //     keyboardInput.value =
+                //         keyboardInput.value.substring(
+                //             0,
+                //             keyboardInput.value.length - 1
+                //         ) + key;
                 break;
         }
         keyboardInput.dispatchEvent(new Event("change"));
@@ -141,19 +142,23 @@ function Game(): Subtree {
 
     const gameOver = () => {
         const { word } = useGlobalStore();
+        document.removeEventListener("keydown", onKeydown);
+        keyboardInput.removeEventListener("change", onInputChange);
+
         current_guess_index = 0;
         alertAfterRepaint(`gameover. answer is: ${word.value}`);
-        document.removeEventListener("keydown", onKeydown);
-        word.pub("");
+        // word.pub("");
     };
 
     const gameWin = () => {
         const winning_index = current_guess_index - 1;
+        document.removeEventListener("keydown", onKeydown);
+        keyboardInput.removeEventListener("change", onInputChange);
+
         current_guess_index = 0;
         alertAfterRepaint("correct");
 
-        document.removeEventListener("keydown", onKeydown);
-        word.pub("");
+        // word.pub("");
     };
 
     document.addEventListener("keydown", onKeydown);
